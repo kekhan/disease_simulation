@@ -1,6 +1,9 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
+//Constant Variables
+const TIMER = 25;
+const infected = [true,false];
 //function calls
 draw();
 // with of the screen
@@ -24,3 +27,36 @@ function select_prevention_tool(){
 function give_help(){
   /*this function should give the selected preventive meth to a character.*/
 }
+function Character (x,y,width,height,type,life,infected,outside,sleeping){
+  // character object
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+  this.life = life;
+  this.infected = infected;
+  this.outside = outside;
+  this.sleeping = sleeping;
+  //instance methods of class
+  this.draw = function(){
+    context.rect(this.x, this.y, this.width,this.height);
+    context.fill();
+  };
+  this.update = function(){
+    this.draw()
+  }
+}
+
+var human = [];
+for (var i=0; i<10; i++){
+  human[i] = new Character(Math.random()*650,Math.random()*650,50,50);
+}
+
+function animator(){
+
+  context.clearRect(0,0,canvas.width,canvas.height);
+  for (let i =0;i<=human.length;i++){
+    human[i].update();
+  }
+}
+animator();
