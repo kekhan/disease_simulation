@@ -3,14 +3,15 @@ const context = canvas.getContext('2d');
 
 //Constant Variables
 const TIMER = 25;
-const infected = [true,false];
-//function calls
-draw();
+const INFECTED = [true,false];
+const LIFE = 10;
+const SLEEP = [true, false];
+const OUTSIDE = [true, false];
+const colors= ['green','purple'];
+
 // with of the screen
-function draw(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 // character of the game
 // character will be stored in a object
@@ -27,7 +28,7 @@ function select_prevention_tool(){
 function give_help(){
   /*this function should give the selected preventive meth to a character.*/
 }
-function Character (x,y,width,height,type,life,infected,outside,sleeping){
+function Character (x,y,width,height,life,infected,outside,sleeping){
   // character object
   this.x = x;
   this.y = y;
@@ -37,26 +38,43 @@ function Character (x,y,width,height,type,life,infected,outside,sleeping){
   this.infected = infected;
   this.outside = outside;
   this.sleeping = sleeping;
+  this.good = colors[0];
+  this.sick = colors[1];
+  this.infected = INFECTED[Math.floor(Math.random()*INFECTED.length)];
+  this.life = LIFE;
   //instance methods of class
   this.draw = function(){
-    context.rect(this.x, this.y, this.width,this.height);
-    context.fill();
-  };
+    context.beginPath();
+    context.arc(this.x, this.y, 30, 0, 2 * Math.PI);
+    if(this.infected){
+
+		 context.fillStyle = this.sick;
+		 context.fill();
+    }
+    else{
+      context.fillStyle = this.good;
+ 		 context.fill();
+
+    }
+    }
+
   this.update = function(){
     this.draw()
   }
 }
 
 var human = [];
-for (var i=0; i<10; i++){
-  human[i] = new Character(Math.random()*650,Math.random()*650,50,50);
+for (var i=0; i<5; i++){
+  human.push(new Character(Math.random()*canvas.width,Math.random()*canvas.height,10,10));
 }
+console.log(human);
 
-function animator(){
-
+function animate(){
+  requestAnimationFrame(animate);
   context.clearRect(0,0,canvas.width,canvas.height);
-  for (let i =0;i<=human.length;i++){
+
+  for (var i =0;i<human.length;i++){
     human[i].update();
   }
 }
-animator();
+animate();
