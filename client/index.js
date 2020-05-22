@@ -1,6 +1,5 @@
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const ctxBtn = canvas.getContext('2d');
+let canvas = document.getElementById('canvas');
+let context = canvas.getContext('2d');
 var count=0;
 //Constant Variables
 const TIMER = 25;
@@ -10,11 +9,15 @@ const SLEEP = [true, false];
 const OUTSIDE = [true, false];
 const colors= ['green','purple'];
 var start =false;
+window.onload = function(){
+  init();
+  window.addEventListener('resize',init, false);
+
+}
 
 
-// with of the screen
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+
 function game_timer(){
   const TIME = 15;
   context.font = "30px Arial";
@@ -24,30 +27,56 @@ function game_timer(){
 
 }
 
+
+
 function main_menu(){
-  var bg = document.getElementById('canvas');
-  bg.style.background ="red";
-  const btnx=innerWidth/2;
-  const btny=innerHeight/2;
+  var bg = canvas;
+  bg.style.background ="white";
+  let ctxBtn = canvas.getContext('2d');
+  let settingsbtn = canvas.getContext('2d');
+  const btnx=canvas.width/2;
+  const btny=canvas.height/2;
+  const setbtnx = canvas.width/3;
+  const setbtny = canvas.height/3;
   const btnw=200;
   const btnh=50;
-  ctxBtn.fillStyle ="black";
+  ctxBtn.fillStyle = "grey";
+  settingsbtn.fillStyle = "grey";
   ctxBtn.fillRect(btnx,btny,btnw,btnh);
+  ctxBtn.fillStyle ="black";
+  settingsbtn.fillStyle = "red";
+  ctxBtn.fillRect(btnx*2,btny*2,btnw,btnh);
+
   ctxBtn.font = "25px Georgia";
-  ctxBtn.fillStyle="yellow";
+  ctxBtn.fillStyle="black";
   ctxBtn.fillText("START GAME",btnx+5,btny+btnh-5);
-
-
+  settingsbtn.fillText("Settings",setbtnx+5,setbtny+ btnh-5);
+  console.log(settingsbtn)
   canvas.addEventListener('click', function(e){
     if(e.x>btnx && e.x < btnx+btnw && e.y>btny && e.y< btny+btnh){
       bg.style.background ="white";
       play_game();
-
     }
+    else if (e.x>setbtnx && e.x < setbtnx+btnw && e.y>setbtny && e.y< setbtny+btnh) {
+      settings()
+    }
+
+
+
   });
 }
 function play_game(){
-    animate();
+
+  for (var i=0; i<5; i++){
+    human.push(new Character(Math.random()*canvas.width,
+    Math.random()*canvas.height,30,true,false,false));
+    insect.push(new Character(Math.random()*canvas.width,
+    Math.random()*canvas.height,5,false,true,false));
+  }
+  animate();
+}
+function settings(){
+  console.log("Settings");
 }
 
 function Character (x,y,radius,isHuman, isInsect, isAnimal){
@@ -88,20 +117,21 @@ function Character (x,y,radius,isHuman, isInsect, isAnimal){
     this.draw()
   }
 }
-var insect =[];
+let insect =[];
 
-var human = [];
-for (var i=0; i<5; i++){
-  human.push(new Character(Math.random()*canvas.width-100*2,
-  Math.random()*canvas.height-30,30,true,false,false));
-  insect.push(new Character(Math.random()*canvas.width-100*2,
-  Math.random()*canvas.height-5,5,false,true,false));
+let human = [];
+
+function init(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  main_menu()
+
 }
-console.log(human);
 
 function animate(){
   requestAnimationFrame(animate);
   context.clearRect(0,0,canvas.width,canvas.height);
+
 
   for (var i =0;i<human.length;i++){
     human[i].update();
@@ -113,4 +143,3 @@ function animate(){
 
 
 }
-main_menu();
